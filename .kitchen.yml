@@ -1,0 +1,25 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[balanced-docs]
+    attributes:
+      citadel:
+        access_key_id: <%= ENV['BALANCED_AWS_ACCESS_KEY_ID'] || ENV['AWS_ACCESS_KEY_ID'] %>
+        secret_access_key: <%= ENV['BALANCED_AWS_SECRET_ACCESS_KEY'] || ENV['AWS_SECRET_ACCESS_KEY'] %>
+      balanced-apt:
+        allow_unstable: true
+      <% if ENV['BALANCED_DOCS_VERSION'] %>
+      rump:
+        package:
+          version: <%= ENV['BALANCED_DOCS_VERSION'][1..-1] %>-<%= ENV['BALANCED_DOCS_PACKAGE_ITERATION'] || 1 %>
+      <% end %>
