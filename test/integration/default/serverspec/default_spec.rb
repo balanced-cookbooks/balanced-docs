@@ -31,29 +31,48 @@ describe port(80) do
   it { should be_listening }
 end
 
+def http_request(url, proto=nil)
+  uri = URI(url)
+  req = Net::HTTP::Get.new(uri.request_uri)
+  req['X-Forwarded-Proto'] = proto if proto
+  Net::HTTP.start(uri.hostname, uri.port) {|http| http.request(req)}
+end
+
 describe 'http://docs.balancedpayments.com' do
   it 'should redirect to HTTPS' do
-    res = Net::HTTP.get(URI('http://localhost/index.html'))
-    expect(res.code).to eq(302)
+    res = http_request('http://localhost/index.html')
+    expect(res.code).to eq('301')
     expect(res['Location']).to eq('https://localhost/index.html')
   end
 
   it 'should redirect to HTTPS (explicit x-forwarded-proto)' do
-    uri = URI('http://localhost/index.html')
-    req = Net::HTTP::Get.new(uri.request_uri)
-    req['X-Forwarded-Proto'] = 'http'
-    res = Net::HTTP.start(uri.hostname, uri.port) {|http| http.request(req)}
-    expect(res.code).to eq(302)
+    res = http_request('http://localhost/index.html', 'http')
+    expect(res.code).to eq('301')
     expect(res['Location']).to eq('https://localhost/index.html')
   end
 end
 
 describe 'https://docs.balancedpayments.com' do
   it 'should work' do
-    uri = URI('http://localhost/1.1/overview/resources/')
-    req = Net::HTTP::Get.new(uri.request_uri)
-    req['X-Forwarded-Proto'] = 'https'
-    res = Net::HTTP.start(uri.hostname, uri.port) {|http| http.request(req)}
-    expect(res.code).to eq(200)
+    res = http_request('http://localhost/1.1/overview/resources/', 'https')
+    expect(res.code).to eq('200')
+    expect(res.body).to include('Test credit card numbers')
+  end
+
+  it 'should redirect from / to /1.0/overview/' do
+    res = http_request('http://localhost/', 'https')
+    expect(res.code).to eq('301')
+    expect(res['Location']).to eq('https://localhost/1.0/overview/')
+  end
+
+  it 'should redirect from /api/ to /1.0/api/' do
+    res = http_request('http://localhost/api/', 'https')
+    expect(res.code).to eq('301')
+    expect(res['Location']).to eq('https://localhost/1.0/api/')
+  end
+
+  it 'should serve static assets' do
+    res = http_request('http://localhost/static/css/styles.css', 'https')
+    expect(res.code).to eq('200')
   end
 end
