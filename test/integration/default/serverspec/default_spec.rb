@@ -50,6 +50,12 @@ describe 'http://docs.balancedpayments.com' do
     expect(res.code).to eq('301')
     expect(res['Location']).to eq('https://localhost/index.html')
   end
+
+  it 'should support the health check' do
+    res = http_request('http://localhost/__health__')
+    expect(res.code).to eq('200')
+    expect(res.body).to eq('ok')
+  end
 end
 
 describe 'https://docs.balancedpayments.com' do

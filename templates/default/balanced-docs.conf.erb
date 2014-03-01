@@ -25,6 +25,11 @@ server {
   send_timeout 360s;
   client_body_timeout 360s;
 
+  <%- # Use an if instead of a location so it processes before the HTTPS check below -%>
+  if ($uri = "/__health__") {
+    return 200 ok;
+  }
+
   if ($http_x_forwarded_proto != "https") {
     return 301 https://$host$request_uri;
   }

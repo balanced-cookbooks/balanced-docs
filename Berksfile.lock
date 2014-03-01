@@ -1,47 +1,38 @@
-{
-  "dependencies": {
-    "balanced-docs": {
-      "locked_version": "1.0.0",
-      "path": "."
-    },
-    "apt": {
-      "locked_version": "2.3.4"
-    },
-    "balanced-apt": {
-      "locked_version": "1.0.2"
-    },
-    "nginx": {
-      "locked_version": "2.2.2"
-    },
-    "balanced-citadel": {
-      "locked_version": "1.0.0"
-    },
-    "poise": {
-      "locked_version": "1.0.4"
-    },
-    "bluepill": {
-      "locked_version": "2.3.1"
-    },
-    "build-essential": {
-      "locked_version": "1.4.2"
-    },
-    "ohai": {
-      "locked_version": "1.1.12"
-    },
-    "runit": {
-      "locked_version": "1.5.8"
-    },
-    "yum": {
-      "locked_version": "3.0.6"
-    },
-    "yum-epel": {
-      "locked_version": "0.2.0"
-    },
-    "citadel": {
-      "locked_version": "1.0.0"
-    },
-    "rsyslog": {
-      "locked_version": "1.10.2"
-    }
-  }
-}
+DEPENDENCIES
+  apt
+  balanced-docs
+    path: .
+
+GRAPH
+  apt (2.3.8)
+  balanced-apt (1.0.6)
+    apt (>= 0.0.0)
+    balanced-citadel (>= 0.0.0)
+    poise (>= 0.0.0)
+  balanced-citadel (1.0.2)
+    citadel (>= 0.0.0)
+  balanced-docs (1.0.2)
+    balanced-apt (>= 0.0.0)
+    nginx (>= 0.0.0)
+  bluepill (2.3.1)
+    rsyslog (>= 0.0.0)
+  build-essential (1.4.4)
+  citadel (1.0.2)
+  nginx (2.4.2)
+    apt (~> 2.2)
+    bluepill (~> 2.3)
+    build-essential (~> 1.4)
+    ohai (~> 1.1)
+    runit (~> 1.2)
+    yum (~> 3.0)
+    yum-epel (>= 0.0.0)
+  ohai (1.1.12)
+  poise (1.0.6)
+  rsyslog (1.12.2)
+  runit (1.5.8)
+    build-essential (>= 0.0.0)
+    yum (~> 3.0)
+    yum-epel (>= 0.0.0)
+  yum (3.1.2)
+  yum-epel (0.3.4)
+    yum (~> 3.0)
