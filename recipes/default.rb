@@ -20,7 +20,7 @@ include_recipe 'balanced-apt'
 include_recipe 'nginx'
 
 package 'balanced-docs' do
-  action :upgrade
+  action :upgrade unless node['balanced-docs']['version']
   version node['balanced-docs']['version']
 end
 
