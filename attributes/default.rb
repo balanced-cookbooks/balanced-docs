@@ -17,3 +17,6 @@
 #
 
 default['balanced-docs']['version'] = nil
+
+# Default site DIAF
+default['nginx']['default_site_enabled'] = false
