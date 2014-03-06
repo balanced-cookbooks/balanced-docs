@@ -11,7 +11,7 @@ GRAPH
     poise (>= 0.0.0)
   balanced-citadel (1.0.2)
     citadel (>= 0.0.0)
-  balanced-docs (1.0.4)
+  balanced-docs (1.0.5)
     balanced-apt (>= 0.0.0)
     nginx (>= 0.0.0)
   bluepill (2.3.1)
