@@ -40,11 +40,23 @@ server {
     return 301 https://$host/$current_api_version/overview/;
   }
 
-  location ~ ^/(\d\.\d|static) {
+  location ^~ /current/?$ {
+    return 301 https://$host/$current_api_version/overview/;
+  }
+
+  location ^~ /(1\.[10])/?$ {
+    return 301 https://$host/$1/overview/;
+  }
+
+  location ^~ ^/(\d\.\d|static) {
     # This space left intentionally blank because nginx doesn't support !~
   }
 
   location / {
+    return 301 https://$host/$current_api_version$request_uri;
+  }
+
+  location @error404 {
     return 301 https://$host/$current_api_version$request_uri;
   }
 }
