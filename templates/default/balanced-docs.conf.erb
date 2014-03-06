@@ -55,4 +55,8 @@ server {
   location / {
     return 301 https://$host/$current_api_version$request_uri;
   }
+
+  location @error404 {
+    return 301 https://$host/$current_api_version$request_uri;
+  }
 }
