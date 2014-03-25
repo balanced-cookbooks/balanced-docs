@@ -59,22 +59,28 @@ describe 'http://docs.balancedpayments.com' do
 end
 
 describe 'https://docs.balancedpayments.com' do
-  it 'should work' do
+  it '1.1 should work' do
     res = http_request('http://localhost/1.1/overview/resources/', 'https')
     expect(res.code).to eq('200')
     expect(res.body).to include('Test credit card numbers')
   end
-
-  it 'should redirect from / to /1.0/overview/' do
-    res = http_request('http://localhost/', 'https')
-    expect(res.code).to eq('301')
-    expect(res['Location']).to eq('https://localhost/1.0/overview/')
+  
+  it '1.0 should work' do
+    res = http_request('http://localhost/1.0/overview/resources/', 'https')
+    expect(res.code).to eq('200')
+    expect(res.body).to include('Test credit card numbers')
   end
 
-  it 'should redirect from /api/ to /1.0/api/' do
+  it 'should redirect from / to /1.1/overview/' do
+    res = http_request('http://localhost/', 'https')
+    expect(res.code).to eq('301')
+    expect(res['Location']).to eq('https://localhost/1.1/overview/')
+  end
+
+  it 'should redirect from /api/ to /1.1/api/' do
     res = http_request('http://localhost/api/', 'https')
     expect(res.code).to eq('301')
-    expect(res['Location']).to eq('https://localhost/1.0/api/')
+    expect(res['Location']).to eq('https://localhost/1.1/api/')
   end
 
   it 'should serve static assets' do
@@ -85,6 +91,6 @@ describe 'https://docs.balancedpayments.com' do
   it 'should redirect 404s to the overview' do
     res = http_request('http://localhost/1.0/notfound', 'https')
     expect(res.code).to eq('301')
-    expect(res['Location']).to eq('https://localhost/1.0/overview/')
+    expect(res['Location']).to eq('https://localhost/1.1/overview/')
   end
 end
