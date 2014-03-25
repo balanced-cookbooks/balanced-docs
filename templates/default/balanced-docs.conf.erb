@@ -24,6 +24,7 @@ server {
   keepalive_timeout 70;
   send_timeout 360s;
   client_body_timeout 360s;
+  error_page 404 = @error404;
 
   <%- # Use an if instead of a location so it processes before the HTTPS check below -%>
   if ($uri = "/__health__") {
@@ -40,15 +41,15 @@ server {
     return 301 https://$host/$current_api_version/overview/;
   }
 
-  location ^~ /current/?$ {
+  location ~ /current/?$ {
     return 301 https://$host/$current_api_version/overview/;
   }
 
-  location ^~ /(1\.[10])/?$ {
+  location ~ /(1\.[10])/?$ {
     return 301 https://$host/$1/overview/;
   }
 
-  location ^~ ^/(\d\.\d|static) {
+  location ~ /(\d\.\d|static) {
     # This space left intentionally blank because nginx doesn't support !~
   }
 
@@ -57,6 +58,6 @@ server {
   }
 
   location @error404 {
-    return 301 https://$host/$current_api_version$request_uri;
+    return 301 https://$host/$current_api_version/overview/;
   }
 }
