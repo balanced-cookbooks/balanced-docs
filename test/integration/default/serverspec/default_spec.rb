@@ -81,4 +81,10 @@ describe 'https://docs.balancedpayments.com' do
     res = http_request('http://localhost/static/css/styles.css', 'https')
     expect(res.code).to eq('200')
   end
+
+  it 'should redirect 404s to the overview' do
+    res = http_request('http://localhost/1.0/notfound', 'https')
+    expect(res.code).to eq('301')
+    expect(res['Location']).to eq('https://localhost/1.0/overview/')
+  end
 end
