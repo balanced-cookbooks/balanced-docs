@@ -35,7 +35,7 @@ server {
     return 301 https://$host$request_uri;
   }
 
-  set $current_api_version "1.0";
+  set $current_api_version "1.1";
 
   location = / {
     return 301 https://$host/$current_api_version/overview/;
